@@ -1,0 +1,16 @@
+{
+    "user1": {
+        "name": "gio",
+        "lastname": "gorjoladze",
+        "account": 4521455441,
+        "balance": 2000,
+        "pin": 1111
+    },
+    "user2": {
+        "name": "mari",
+        "lastname": "bulia",
+        "account": 3521455442,
+        "balance": 1500,
+        "pin": 2222
+    }
+}

@@ -2,7 +2,6 @@ import json
 from datetime import datetime
 
 
-
 class Bank:
     def __init__(self, name, lastname, account, balance, pin):
         self.name = name
@@ -14,14 +13,13 @@ class Bank:
     def __repr__(self):
         return f"{self.name} {self.lastname} | {self.account} | Balance: {self.balance}"
 
-
     def to_dict(self):
         return {
             "name": self.name,
             "lastname": self.lastname,
             "account": self.account,
             "balance": self.balance,
-            "pin": self.pin
+            "pin": self.pin,
         }
 
 
@@ -32,25 +30,25 @@ class Bankomat:
             file.write(text + "\n")
 
     def deposit(self, person, amount):
-        time=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         if amount > 0:
             person.balance += amount
-            msg=f"{time}-->{person.name} შეიტანა {amount}. თქვენი ანგარიში  {person.balance}"
+            msg = f"{time}-->{person.name} შეიტანა {amount}. თქვენი ანგარიში  {person.balance}"
             print(msg)
             self.log(msg)
 
     def withdraw(self, person, amount):
-        time=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         if 0 < amount < person.balance:
             person.balance -= amount
-            msg=f"{time}-->{person.name} გამოიტანა {amount}. თქვენი ანგარიში :  {person.balance}"
+            msg = f"{time}-->{person.name} გამოიტანა {amount}. თქვენი ანგარიში :  {person.balance}"
             print(msg)
             self.log(msg)
         else:
             print("არარის საკმარისი თანხა")
 
     def send_money(self, sender, reciver, amount):
-        time=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         if 0 < amount < sender.balance:
             sender.balance -= amount
             reciver.balance += amount
@@ -60,62 +58,55 @@ class Bankomat:
         else:
             print("არარის საკმარისი თანხა")
 
-    def change_pin(self,person,pin):
-        time=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    def change_pin(self, person, pin):
+        time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         person.pin = pin
-        msg=f"{time}-->{person.name} იმ შეცვალა პინ კოდი , ახალი პინ კოდი არის : {pin}"
+        msg = (
+            f"{time}-->{person.name} იმ შეცვალა პინ კოდი , ახალი პინ კოდი არის : {pin}"
+        )
         print(msg)
         self.log(msg)
 
 
+user1 = Bank("gio", "gorjoladze", 4521455441, 2000, 1111)
+user2 = Bank("mari", "bulia", 3521455442, 1500, 2222)
 
-
-
-
-user1=Bank("gio","gorjoladze",4521455441,2000,1111)
-user2=Bank("mari","bulia",3521455442,1500,2222)
-
-userslist={
-    "user1":user1.to_dict(),
-    "user2":user2.to_dict()
-}
+userslist = {"user1": user1.to_dict(), "user2": user2.to_dict()}
 
 # marto ertxel gaushvebt ro momxmareblebi sheiqmnas
-with open("bank.json","w",encoding="utf-8") as f:
-    json.dump(userslist,f,ensure_ascii=False,indent=4)
+with open("bank.json", "w", encoding="utf-8") as f:
+    json.dump(userslist, f, ensure_ascii=False, indent=4)
 
 
 def load_users():
     with open("bank.json", "r", encoding="utf-8") as file:
         data = json.load(file)
-        user={uid:Bank(**info) for uid, info in data.items()}
-        return user,data
+        user = {uid: Bank(**info) for uid, info in data.items()}
+        return user, data
+
 
 def save_users(newdata):
     with open("bank.json", "w", encoding="utf-8") as file:
-        json.dump(newdata,file,ensure_ascii=False,indent=4)
+        json.dump(newdata, file, ensure_ascii=False, indent=4)
 
 
-
-
-users,newdata= load_users()
-bankomat=Bankomat()
-
+users, newdata = load_users()
+bankomat = Bankomat()
 
 
 print("**********ბანკომატი**********")
 
-userid=input("შეიყვანეთ მომხმარებლის სახელი :").lower()
+userid = input("შეიყვანეთ მომხმარებლის სახელი :").lower()
 
 if userid not in users:
     print(" მომხმარებელი არ არსებობს")
     exit()
 
-person=users[userid]
+person = users[userid]
 
-userpin=input("შეიყვანეთ მომხმარებლის პინ კოდი :")
+userpin = input("შეიყვანეთ მომხმარებლის პინ კოდი :")
 
-if userpin !=str(person.pin):
+if userpin != str(person.pin):
     print("პინი არასწორია !")
     exit()
 
@@ -131,28 +122,28 @@ while True:
     print("5 პინ კოდის შეცვლა")
     print("6 გამოსვლა")
 
-    choice=int(input("აირჩიეთ :  "))
-    if choice==1:
+    choice = int(input("აირჩიეთ :  "))
+    if choice == 1:
         print(person)
 
-    elif choice==2:
-        bankomat.deposit(person,int(input("შეიყვანეთ თანხა :")))
+    elif choice == 2:
+        bankomat.deposit(person, int(input("შეიყვანეთ თანხა :")))
 
-    elif choice==3:
-        bankomat.withdraw(person,int(input("შეიყვანეთ თანხა :")))
-    elif choice==4:
-        target=input("შეიყვანეთ მომხმარებელი :")
+    elif choice == 3:
+        bankomat.withdraw(person, int(input("შეიყვანეთ თანხა :")))
+    elif choice == 4:
+        target = input("შეიყვანეთ მომხმარებელი :")
         if target not in users:
             print("მომხმარებელი არ არსებობს")
             continue
-        bankomat.send_money(person,users[target],int(input("შეიყვანეთ თანხა :")))
-        newdata[target]["balance"]=users[target].balance
-    elif choice==5:
-        bankomat.change_pin(person,int(input("შეიყვანეთ ახალი პინ კოდი :")))
-        newdata[userid]["pin"]=person.pin
-    elif choice==6:
+        bankomat.send_money(person, users[target], int(input("შეიყვანეთ თანხა :")))
+        newdata[target]["balance"] = users[target].balance
+    elif choice == 5:
+        bankomat.change_pin(person, int(input("შეიყვანეთ ახალი პინ კოდი :")))
+        newdata[userid]["pin"] = person.pin
+    elif choice == 6:
         print("კარგად ბრძანდებოდეთ :)")
         break
 
-newdata[userid]["balance"]=person.balance
+newdata[userid]["balance"] = person.balance
 save_users(newdata)
