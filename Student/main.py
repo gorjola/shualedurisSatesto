@@ -2,11 +2,13 @@ import json
 
 
 class Student:
-    def __init__(self, name="", age=0, grade=None):
+    def __init__(self, name="", age=0, grade=""):
         self.name = name
         self.age = age
-        self.grade = [grade] if grade is not None else []
+        self.grade = grade
 
+
+class StudentServices:
     # გადაყავს ქულები ასოებად
     def number_to_letter(self, score):
         if score >= 90:
@@ -22,7 +24,34 @@ class Student:
 
     # ახალი სტუდენტის დამატება
     def new_student(self):
-        pass
+        name = input("შეიყვანეთ სტუდენტის სახელი: ")
+        age = int(input("შეიყვანეთ სტუდენტის ასაკი: "))
+        total = 0
+        for i in range(1, 4):
+            grade = int(input(f"სტუდენტის შეფასება N{i}: "))
+            total += grade
+        num_to_char = self.number_to_letter(total)
+        student = Student(name, age, num_to_char)
+
+        with open("Student/students.json", "r+") as file:
+            data = json.load(file)
+
+            if data["students"]:
+                new_id = str(max(int(i) for i in data["students"].keys()) + 1)
+            else:
+                new_id = "1"
+
+            data["students"][new_id] = {
+                "name": student.name,
+                "age": student.age,
+                "grade": student.grade,
+            }
+
+            file.seek(0)
+            json.dump(data, file, indent=4)
+
+        print("სტუდენტი წარმატებით დაემატა!")
+        return student
 
     # ყველა სტუდენტის ნახვა
     def view_students(self):
@@ -67,8 +96,8 @@ class Student:
                 print("არასწორი არჩევანი, გთხოვთ სცადოთ თავიდან.")
                 continue
 
-            if choice == "1":
-                pass
+            elif choice == "1":
+                self.new_student()
             elif choice == "2":
                 self.view_students()
             elif choice == "3":
@@ -80,5 +109,5 @@ class Student:
                 break
 
 
-student = Student()
-student.run()
+service = StudentServices()
+service.run()
