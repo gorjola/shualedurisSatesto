@@ -2,9 +2,9 @@ import json
 
 
 class Student:
-    def __init__(self, name="", age=0, grade=""):
+    def __init__(self, name="", roll_number=int, grade=""):
         self.name = name
-        self.age = age
+        self.roll_number = roll_number
         self.grade = grade
 
 
