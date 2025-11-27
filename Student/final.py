@@ -8,7 +8,6 @@ class Student:
         self.__roll_number = roll_number
         self.__grade = grade
 
-    # Encapsulation მეთოდები
     def get_name(self):
         return self.__name
 
@@ -27,8 +26,11 @@ class StudentService:
 
     # JSON ჩამოტვირთვა
     def load_json(self):
-        with open("Student/students.json", "r") as file:
-            return json.load(file)
+        try:
+            with open("Student/students.json", "r") as file:
+                return json.load(file)
+        except (FileNotFoundError, json.JSONDecodeError):
+            return {}
 
     # JSON შენახვა
     def save_json(self, data):
@@ -120,9 +122,24 @@ class StudentFunctions(StudentService):
                     f"ID: {key}, Name: {i['name']}, "
                     f"Roll Number: {i['roll_number']}, Grade: {i['grade']}"
                 )
+                input("გაგრძელებისთვის დააჭირეთ Enter...")
                 return key
-        print("სტუდენტი ვერ მოიძებნა.")
-        return None
+        print("\nსტუდენტი ვერ მოიძებნა.\n")
+
+        cont_option = {
+            "1": "გაგრძელება",
+            "2": "მთავარ მენიუში დაბრუნება",
+        }
+        for key, value in cont_option.items():
+            print(f"{key}. {value}")
+        print("\n")
+
+        choice = input("გთხოვთ აირჩიეთ ოპცია: ")
+
+        if choice == "1":
+            return self.find_student()
+        else:
+            return None
 
     # მოსწავლის შეფასების განახლება
     def update_grade(self):
@@ -140,11 +157,7 @@ class StudentFunctions(StudentService):
 
 
 # დისპლეი მენიუ
-class Display(StudentFunctions):
-
-    def __init__(self):
-        super().__init__()
-
+class Display:
     # მენიუს ჩვენება
     def menu(self):
         display_menu = {
@@ -161,23 +174,26 @@ class Display(StudentFunctions):
 
     # პროგრამის გაშვება
     def run(self):
+        service = StudentFunctions()
+
         while True:
             self.menu()
             choice = input("გთხოვთ აირჩიეთ ოპცია: ")
 
             if choice == "1":
-                self.add_student()
+                service.add_student()
             elif choice == "2":
-                self.load_students()
+                service.load_students()
             elif choice == "3":
-                self.find_student()
+                service.find_student()
             elif choice == "4":
-                self.update_grade()
+                service.update_grade()
             elif choice == "5":
                 print("პროგრამა დასრულდა.")
                 break
             else:
                 print("არასწორი არჩევანი, სცადეთ თავიდან.")
+                input("\nგაგრძელებისთვის დააჭირეთ Enter...")
 
 
 # პროგრამის გაშვება
