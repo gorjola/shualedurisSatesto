@@ -8,6 +8,7 @@ class Student:
         self.__roll_number = roll_number
         self.__grade = grade
 
+    # Encapsulation მეთოდები
     def get_name(self):
         return self.__name
 
@@ -139,7 +140,11 @@ class StudentFunctions(StudentService):
 
 
 # დისპლეი მენიუ
-class Display:
+class Display(StudentFunctions):
+
+    def __init__(self):
+        super().__init__()
+
     # მენიუს ჩვენება
     def menu(self):
         display_menu = {
@@ -156,20 +161,18 @@ class Display:
 
     # პროგრამის გაშვება
     def run(self):
-        service = StudentFunctions()
-
         while True:
             self.menu()
             choice = input("გთხოვთ აირჩიეთ ოპცია: ")
 
             if choice == "1":
-                service.add_student()
+                self.add_student()
             elif choice == "2":
-                service.load_students()
+                self.load_students()
             elif choice == "3":
-                service.find_student()
+                self.find_student()
             elif choice == "4":
-                service.update_grade()
+                self.update_grade()
             elif choice == "5":
                 print("პროგრამა დასრულდა.")
                 break
